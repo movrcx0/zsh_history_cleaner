@@ -113,7 +113,7 @@ zsh-history-cleaner/
 
    Or manually copy the binary:
    ```bash
-   sudo cp build/zsh_history_cleaner /usr/local/bin/
+   sudo cp zsh_history_cleaner /usr/local/bin/
    ```
 
 Note: You can also build in debug mode with:
