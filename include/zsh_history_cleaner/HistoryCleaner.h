@@ -54,6 +54,7 @@ private:
     bool dryRun_ = false;               // Flag to simulate deletion without actual changes
     bool interactive_ = true;           // Flag indicating interactive mode (vs. command-line args)
     bool preciseTime_ = false;          // Flag indicating if precise time should be used/required for dates
+    bool isWhitelistMode_ = false;      // Flag indicating if filters act as a whitelist (keep matches) instead of blacklist (delete matches)
     int shredPasses_ = 32;              // Number of passes for secure delete (read from Constants.h)
 
     // --- State Members ---

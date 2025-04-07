@@ -552,6 +552,9 @@ void HistoryCleaner::parseArguments(int argc, char* argv[]) {
                 errorExit("Invalid number provided for --passes: '" + passesStr + "'.");
             }
             hasNonHistfileArgs = true;
+        } else if (arg == "--whitelist") {
+            isWhitelistMode_ = true;
+            hasNonHistfileArgs = true; // Treat whitelist as a mode-affecting arg
         } else {
             errorExit("Unknown option: '" + arg + "'. Use -h or --help for usage.");
         }
@@ -879,6 +882,21 @@ void HistoryCleaner::runInteractive() {
         return;
     }
 
+    // --- Ask about Whitelist Mode if Filters Exist ---
+    if (!filterKeywords_.empty() || !filterRegexes_.empty()) {
+        std::cout << "\n❓ Treat these filters as a whitelist (keep matching entries)? (y/[N]): ";
+        std::string whitelistStr;
+        if (std::getline(std::cin, whitelistStr) && !whitelistStr.empty()) {
+            char whitelistChoice = std::tolower(whitelistStr[0]);
+            isWhitelistMode_ = (whitelistChoice == 'y');
+        }
+        if (isWhitelistMode_) {
+            std::cout << "   Filters will be used as a whitelist." << std::endl;
+        } else {
+            std::cout << "   Filters will be used as a blacklist (default)." << std::endl;
+        }
+    }
+
     // --- Get Backup Preference ---
     std::cout << "\n❓ Create backup before cleaning? (y/[N]): ";
     std::string backupStr;
@@ -1009,6 +1027,11 @@ bool HistoryCleaner::processCommandBlock(const std::string& block, unsigned long
                                 break;
                             }
                         }
+                    }
+
+                    // In whitelist mode, we keep matching entries instead of deleting them
+                    if (isWhitelistMode_) {
+                        shouldDelete = !shouldDelete;
                     }
                 }
             }
@@ -1250,11 +1273,13 @@ void HistoryCleaner::usage(const std::string& progName) {
               << " --days <N>           Number of days for 'older_than' mode (positive integer).\n"
               << " --precise            Use precise time input (HH:MM or HH:MM:SS) for dates.\n"
               << "                      Not available in interactive mode.\n"
-              << " --keyword <STRING...> Delete only entries containing any of these exact strings.\n"
+              << " --keyword <STRING...> Filter entries containing any of these exact strings.\n"
               << "                      Multiple keywords can be provided as separate arguments.\n"
               << "                      Cannot be used with --regex. Applies after time filtering.\n"
-              << " --regex <PATTERN...>  Delete only entries matching any of these regex patterns.\n"
+              << " --regex <PATTERN...>  Filter entries matching any of these regex patterns.\n"
               << "                      Multiple patterns can be provided as separate arguments.\n"
+              << " --whitelist           Treat filters as a whitelist (keep matching entries)\n"
+              << "                      instead of blacklist (delete matching entries).\n"
               << "                      Cannot be used with --keyword. Applies after time filtering.\n"
               << " --backup             Create a backup of the original history file before deletion.\n"
               << "                      Ignored if --dry-run is used.\n"

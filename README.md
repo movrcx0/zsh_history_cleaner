@@ -46,6 +46,7 @@ A secure command-line tool for selectively cleaning Zsh shell history with advan
   - Keyword-based filtering (exact string matching)
   - Regular expression pattern matching
   - Combine time and content filters
+  - Whitelist mode (keep only matching entries) or blacklist mode (delete matching entries)
 
 - **Security Features**:
   - Secure multi-pass overwrite of deleted entries
