@@ -212,6 +212,7 @@ zsh_history_cleaner --mode newer_than --days 90 --backup
 --precise            Enable precise time matching
 --keyword <STRING...> Filter by exact strings
 --regex <PATTERN...>  Filter by regex patterns
+--whitelist          Treat filters as whitelist (keep matches) instead of blacklist
 --backup             Create backup before cleaning
 --dry-run            Preview changes without modifying
 --histfile <PATH>    Custom history file path
