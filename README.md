@@ -6,6 +6,8 @@
 
 A secure command-line tool for selectively cleaning Zsh shell history with advanced filtering capabilities and secure deletion.
 
+**Website:** [zsh.traum.zip](https://zsh.traum.zip) | **Documentation:** [zsh.traum.zip/docs](https://zsh.traum.zip/docs)
+
 ## Table of Contents
 - [Features](#features)
 - [Installation](#installation)
